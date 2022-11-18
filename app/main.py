@@ -29,7 +29,7 @@ match STAGE:
                         {"type": "mrkdwn", "text": f"*End Build Time* \n{now} UTC"},
                     ],
                 },
-                {"type": "section", "fields": [{"type": "mrkdwn", "text": "*Author*"}]},
+                {"type": "section", "fields": [{"type": "mrkdwn", "text": f"*Author*: {AUTHOR}"}]},
                 {"type": "divider"},
                 {
                     "type": "section",
@@ -51,7 +51,7 @@ match STAGE:
                         {"type": "mrkdwn", "text": f"*Merge Time* \n{now} UTC"},
                     ],
                 },
-                {"type": "section", "fields": [{"type": "mrkdwn", "text": "*Author*"}]},
+                {"type": "section", "fields": [{"type": "mrkdwn", "text": f"*Author*: {AUTHOR}"}]},
                 {"type": "divider"},
                 {
                     "type": "section",

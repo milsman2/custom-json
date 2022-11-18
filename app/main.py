@@ -1,80 +1,90 @@
 """
 All imports for sending a custom webhook
 """
-import os
 import json
 from datetime import datetime
+import argparse
 import requests
 from dotenv import load_dotenv
 
 load_dotenv()
 now = datetime.now().time()  # time object
+parser = argparse.ArgumentParser()
+parser.add_argument("--Stage", help = "Stage")
+parser.add_argument("--Author", help = "Author")
+parser.add_argument("--Webhook",  help = "Slack Webhook")
 
-SLACK_WEBHOOK = os.environ.get("SLACK_WEBHOOK")
-AUTHOR = os.environ.get("AUTHOR")
-STAGE = os.environ.get("STAGE")
+args = parser.parse_args()
 
-match STAGE:
-    case "build":
-        data = {
-            "blocks": [
-                {
-                    "type": "header",
-                    "text": {"type": "plain_text", "text": "Build Completed"},
-                },
-                {"type": "divider"},
-                {
-                    "type": "section",
-                    "fields": [
-                        {"type": "mrkdwn", "text": f"*End Build Time* \n{now} UTC"},
-                    ],
-                },
-                {"type": "section", "fields": [{"type": "mrkdwn", "text": f"*Author*: {AUTHOR}"}]},
-                {"type": "divider"},
-                {
-                    "type": "section",
-                    "fields": [{"type": "mrkdwn", "text": "Nice :heavy_check_mark:"}],
-                },
-            ]
-        }
-    case "push":
-        data = {
-            "blocks": [
-                {
-                    "type": "header",
-                    "text": {"type": "plain_text", "text": "Main branch merged"},
-                },
-                {"type": "divider"},
-                {
-                    "type": "section",
-                    "fields": [
-                        {"type": "mrkdwn", "text": f"*Merge Time* \n{now} UTC"},
-                    ],
-                },
-                {"type": "section", "fields": [{"type": "mrkdwn", "text": f"*Author*: {AUTHOR}"}]},
-                {"type": "divider"},
-                {
-                    "type": "section",
-                    "fields": [{"type": "mrkdwn", "text": "Nice :heavy_check_mark:"}],
-                },
-            ]
-        }
-    case default:
-        data = {
-            "blocks": [
-                {
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Message type not recognized :(",
+STAGE = args.Stage
+AUTHOR = args.Author
+SLACK_WEBHOOK = args.Webhook
+
+def main():
+    match STAGE:
+        case "build":
+            data = {
+                "blocks": [
+                    {
+                        "type": "header",
+                        "text": {"type": "plain_text", "text": "Build Completed"},
                     },
-                },
-            ]
-        }
+                    {"type": "divider"},
+                    {
+                        "type": "section",
+                        "fields": [
+                            {"type": "mrkdwn", "text": f"*End Build Time* \n{now} UTC"},
+                        ],
+                    },
+                    {"type": "section", "fields": [{"type": "mrkdwn", "text": f"*Author*: {AUTHOR}"}]},
+                    {"type": "divider"},
+                    {
+                        "type": "section",
+                        "fields": [{"type": "mrkdwn", "text": "Nice :heavy_check_mark:"}],
+                    },
+                ]
+            }
+        case "push":
+            data = {
+                "blocks": [
+                    {
+                        "type": "header",
+                        "text": {"type": "plain_text", "text": "Main branch merged"},
+                    },
+                    {"type": "divider"},
+                    {
+                        "type": "section",
+                        "fields": [
+                            {"type": "mrkdwn", "text": f"*Merge Time* \n{now} UTC"},
+                        ],
+                    },
+                    {"type": "section", "fields": [{"type": "mrkdwn", "text": f"*Author*: {AUTHOR}"}]},
+                    {"type": "divider"},
+                    {
+                        "type": "section",
+                        "fields": [{"type": "mrkdwn", "text": "Nice :heavy_check_mark:"}],
+                    },
+                ]
+            }
+        case default:
+            data = {
+                "blocks": [
+                    {
+                        "type": "header",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Message type not recognized :(",
+                        },
+                    },
+                ]
+            }
 
-requests.post(
-    SLACK_WEBHOOK,
-    data=json.dumps(data),
-    headers={"Content-Type": "application/json"},
-    timeout=3,
-)
+    requests.post(
+        SLACK_WEBHOOK,
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"},
+        timeout=3,
+    )
+
+if __name__ == "__main__":
+    main()

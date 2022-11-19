@@ -44,6 +44,28 @@ def main():
                     },
                 ]
             }
+        case "deployment":
+            data = {
+                "blocks": [
+                    {
+                        "type": "header",
+                        "text": {"type": "plain_text", "text": "Build Deployed"},
+                    },
+                    {"type": "divider"},
+                    {
+                        "type": "section",
+                        "fields": [
+                            {"type": "mrkdwn", "text": f"*End Build Time* \n{now} UTC"},
+                        ],
+                    },
+                    {"type": "section", "fields": [{"type": "mrkdwn", "text": f"*Author*: {AUTHOR}"}]},
+                    {"type": "divider"},
+                    {
+                        "type": "section",
+                        "fields": [{"type": "mrkdwn", "text": "Nice :heavy_check_mark:"}],
+                    },
+                ]
+            }
         case "push":
             data = {
                 "blocks": [

@@ -1,6 +1,7 @@
 """
 All imports for sending a custom webhook
 """
+import os
 import json
 from datetime import datetime
 import argparse
@@ -12,13 +13,12 @@ now = datetime.now().time()  # time object
 parser = argparse.ArgumentParser()
 parser.add_argument("--Stage", help = "Stage")
 parser.add_argument("--Author", help = "Author")
-parser.add_argument("--Webhook",  help = "Slack Webhook")
 
 args = parser.parse_args()
 
 STAGE = args.Stage
 AUTHOR = args.Author
-SLACK_WEBHOOK = args.Webhook
+SLACK_WEBHOOK = os.environ.get('SLACK_WEBHOOK')
 
 def main():
     match STAGE:

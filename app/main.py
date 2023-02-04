@@ -1,26 +1,34 @@
 """
 All imports for sending a custom webhook
 """
-import os
 import json
 from datetime import datetime
 import argparse
 import requests
+import pytz
 from dotenv import load_dotenv
+from settings.config import settings
 
 load_dotenv()
-now = datetime.now().time()  # time object
+
+now = datetime.now(pytz.timezone(settings.TIMEZONE)).strftime(
+    "%d/%m/%Y %I:%M:%S %P"
+)  # time object
 parser = argparse.ArgumentParser()
-parser.add_argument("--Stage", help = "Stage")
-parser.add_argument("--Author", help = "Author")
+parser.add_argument("--Stage", help="Stage")
+parser.add_argument("--Author", help="Author")
 
 args = parser.parse_args()
 
 STAGE = args.Stage
 AUTHOR = args.Author
-SLACK_WEBHOOK = os.environ.get('SLACK_WEBHOOK')
+SLACK_WEBHOOK = settings.SLACK_WEBHOOK
+
 
 def main():
+    """
+    Different styling and input for each stage
+    """
     match STAGE:
         case "build":
             data = {
@@ -33,14 +41,19 @@ def main():
                     {
                         "type": "section",
                         "fields": [
-                            {"type": "mrkdwn", "text": f"*End Build Time* \n{now} UTC"},
+                            {"type": "mrkdwn", "text": f"*End Build Time* \n{now}"},
                         ],
                     },
-                    {"type": "section", "fields": [{"type": "mrkdwn", "text": f"*Author*: {AUTHOR}"}]},
+                    {
+                        "type": "section",
+                        "fields": [{"type": "mrkdwn", "text": f"*Author*: {AUTHOR}"}],
+                    },
                     {"type": "divider"},
                     {
                         "type": "section",
-                        "fields": [{"type": "mrkdwn", "text": "Nice :heavy_check_mark:"}],
+                        "fields": [
+                            {"type": "mrkdwn", "text": "Nice :heavy_check_mark:"}
+                        ],
                     },
                 ]
             }
@@ -55,14 +68,19 @@ def main():
                     {
                         "type": "section",
                         "fields": [
-                            {"type": "mrkdwn", "text": f"*End Build Time* \n{now} UTC"},
+                            {"type": "mrkdwn", "text": f"*End Build Time* \n{now}"},
                         ],
                     },
-                    {"type": "section", "fields": [{"type": "mrkdwn", "text": f"*Author*: {AUTHOR}"}]},
+                    {
+                        "type": "section",
+                        "fields": [{"type": "mrkdwn", "text": f"*Author*: {AUTHOR}"}],
+                    },
                     {"type": "divider"},
                     {
                         "type": "section",
-                        "fields": [{"type": "mrkdwn", "text": "Nice :heavy_check_mark:"}],
+                        "fields": [
+                            {"type": "mrkdwn", "text": "Nice :heavy_check_mark:"}
+                        ],
                     },
                 ]
             }
@@ -77,14 +95,19 @@ def main():
                     {
                         "type": "section",
                         "fields": [
-                            {"type": "mrkdwn", "text": f"*Merge Time* \n{now} UTC"},
+                            {"type": "mrkdwn", "text": f"*Merge Time* \n{now}"},
                         ],
                     },
-                    {"type": "section", "fields": [{"type": "mrkdwn", "text": f"*Author*: {AUTHOR}"}]},
+                    {
+                        "type": "section",
+                        "fields": [{"type": "mrkdwn", "text": f"*Author*: {AUTHOR}"}],
+                    },
                     {"type": "divider"},
                     {
                         "type": "section",
-                        "fields": [{"type": "mrkdwn", "text": "Nice :heavy_check_mark:"}],
+                        "fields": [
+                            {"type": "mrkdwn", "text": "Nice :heavy_check_mark:"}
+                        ],
                     },
                 ]
             }
@@ -95,7 +118,7 @@ def main():
                         "type": "header",
                         "text": {
                             "type": "plain_text",
-                            "text": "Message type not recognized :(",
+                            "text": f"Message type not recognized at {now} :(",
                         },
                     },
                 ]
@@ -107,6 +130,7 @@ def main():
         headers={"Content-Type": "application/json"},
         timeout=3,
     )
+
 
 if __name__ == "__main__":
     main()

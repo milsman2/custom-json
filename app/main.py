@@ -1,12 +1,15 @@
 """
 All imports for sending a custom webhook
 """
+
+import argparse
 import json
 from datetime import datetime
-import argparse
-import requests
+
 import pytz
+import requests
 from dotenv import load_dotenv
+from icecream import ic
 from settings.config import settings
 
 load_dotenv()
@@ -29,6 +32,7 @@ def main():
     """
     Different styling and input for each stage
     """
+    ic()
     match STAGE:
         case "build":
             data = {
@@ -111,7 +115,7 @@ def main():
                     },
                 ]
             }
-        case default:
+        case _:
             data = {
                 "blocks": [
                     {
@@ -133,4 +137,5 @@ def main():
 
 
 if __name__ == "__main__":
+    ic()
     main()

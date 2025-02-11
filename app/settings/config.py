@@ -1,12 +1,14 @@
 """
 Pydantic config and settings
 """
+
+import os
+from enum import Enum
+from functools import lru_cache
+from typing import Optional
+
 from dotenv import load_dotenv
 from pydantic import BaseSettings
-from typing import Optional
-from enum import Enum
-import os
-from functools import lru_cache
 
 load_dotenv()
 

@@ -20,7 +20,7 @@ platformdirs==4.3.6
 pydantic==2.10.6
 pydantic_core==2.27.2
 Pygments==2.19.1
-pylint==3.3.4
+pylint==4.0.9
 python-dotenv==1.0.1
 pytz==2025.1
 requests==2.32.3

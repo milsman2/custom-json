@@ -1,17 +1,16 @@
-# 
-FROM python:3.10
+FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
 
-# 
 WORKDIR /code
 
-# 
-COPY ./requirements.txt /code/requirements.txt
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy
 
-# 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+COPY pyproject.toml README.md ./
+COPY app ./app
 
-# 
-COPY ./app /code/app
+RUN uv sync --no-dev --no-cache
 
-# 
-CMD ["python", "./app/main.py"]
+# Preserve the original script entry point and allow docker run arguments.
+CMD ["uv", "run", "--no-sync", "python", "app/main.py"]

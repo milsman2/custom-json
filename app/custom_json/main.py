@@ -73,9 +73,7 @@ def send_notification(stage: str, author: str | None, webhook_url: str) -> None:
 
 def create_parser() -> argparse.ArgumentParser:
     """Build the CLI parser, retaining the original capitalized option names."""
-    parser = argparse.ArgumentParser(
-        description="Send a Slack lifecycle notification."
-    )
+    parser = argparse.ArgumentParser(description="Send a Slack lifecycle notification.")
     parser.add_argument(
         "--Stage",
         "--stage",

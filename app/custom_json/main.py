@@ -37,7 +37,7 @@ def build_payload(
         fields: list[dict[str, str]] = [
             {
                 "type": "mrkdwn",
-                "text": f"*{time_label}*\n{timestamp:%d/%m/%Y %I:%M:%S %p}",
+                "text": f"*{time_label}*\\n{timestamp:%d/%m/%Y %I:%M:%S %p}",
             },
         ]
         if author is not None:

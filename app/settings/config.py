@@ -1,27 +1,16 @@
 """Backward-compatible re-exports of the settings API."""
 
-try:
-    from custom_json.config import (
-        EnvironmentEnum,
-        FactoryConfig,
-        GlobalConfig,
-        LocalConfig,
-        ProdConfig,
-        Settings,
-        get_configuration,
-        settings,
-    )
-except ModuleNotFoundError:
-    from app.custom_json.config import (
-        EnvironmentEnum,
-        FactoryConfig,
-        GlobalConfig,
-        LocalConfig,
-        ProdConfig,
-        Settings,
-        get_configuration,
-        settings,
-    )
+from app.custom_json.config import (
+    EnvironmentEnum,
+    FactoryConfig,
+    GlobalConfig,
+    LocalConfig,
+    ProdConfig,
+    Settings,
+    app_settings,
+    get_configuration,
+    settings,
+)
 
 __all__ = [
     "EnvironmentEnum",
@@ -30,6 +19,7 @@ __all__ = [
     "LocalConfig",
     "ProdConfig",
     "Settings",
+    "app_settings",
     "get_configuration",
     "settings",
 ]

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import argparse
 import json
+from collections.abc import Sequence
 from datetime import datetime
-from typing import Sequence
 from zoneinfo import ZoneInfo
 
 import requests
@@ -25,9 +25,10 @@ def build_payload(
         "deployment": ("Build Deployed", "End Build Time"),
         "push": ("Main branch merged", "Merge Time"),
     }
-    title, time_label = labels.get(
-        stage, (f"Message type not recognized at {timestamp:%d/%m/%Y %I:%M:%S %p} :(", "")
+    unknown_title = (
+        f"Message type not recognized at {timestamp:%d/%m/%Y %I:%M:%S %p} :("
     )
+    title, time_label = labels.get(stage, (unknown_title, ""))
     blocks: list[dict[str, object]] = [
         {"type": "header", "text": {"type": "plain_text", "text": title}},
     ]
@@ -36,7 +37,7 @@ def build_payload(
         fields: list[dict[str, str]] = [
             {
                 "type": "mrkdwn",
-                "text": f"*{time_label}*\n{timestamp:%d/%m/%Y %I:%M:%S %p}",
+                "text": f"*{time_label}*\\n{timestamp:%d/%m/%Y %I:%M:%S %p}",
             },
         ]
         if author is not None:
@@ -72,16 +73,24 @@ def send_notification(stage: str, author: str | None, webhook_url: str) -> None:
 
 def create_parser() -> argparse.ArgumentParser:
     """Build the CLI parser, retaining the original capitalized option names."""
-    parser = argparse.ArgumentParser(description="Send a Slack lifecycle notification.")
-    parser.add_argument(
-        "--Stage", "--stage", dest="stage", required=True, help="build, deployment, or push"
+    parser = argparse.ArgumentParser(
+        description="Send a Slack lifecycle notification."
     )
-    parser.add_argument("--Author", "--author", dest="author", help="Notification author")
+    parser.add_argument(
+        "--Stage",
+        "--stage",
+        dest="stage",
+        required=True,
+        help="build, deployment, or push",
+    )
+    parser.add_argument(
+        "--Author", "--author", dest="author", help="Notification author"
+    )
     return parser
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    """CLI entry point."""
+    """Run the CLI and return a process exit code."""
     args = create_parser().parse_args(argv)
     if not settings.SLACK_WEBHOOK:
         logger.error("SLACK_WEBHOOK is not configured")

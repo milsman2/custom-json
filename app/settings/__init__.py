@@ -1,7 +1,5 @@
-"""
-Settings module for the app package.
-"""
+"""Backward-compatible settings imports."""
 
-from app.settings import settings
+from app.custom_json.config import app_settings, settings
 
-__all__ = ["settings"]
+__all__ = ["app_settings", "settings"]

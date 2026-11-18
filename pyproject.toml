@@ -1,0 +1,65 @@
+[project]
+name = "custom-json"
+version = "1.0.0"
+description = "Send formatted build, deployment, and merge notifications to Slack."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Miles Kane" }]
+dependencies = [
+    "loguru>=0.7.3",
+    "pydantic-settings>=2.11.0",
+    "python-dotenv>=1.1.1",
+    "requests>=2.32.5",
+]
+
+[project.scripts]
+custom-json = "custom_json.main:main"
+
+[dependency-groups]
+dev = ["mypy>=1.18.2", "pytest>=8.4.2", "pytest-cov>=7.0.0", "ruff>=0.14.0"]
+
+[build-system]
+requires = ["uv_build>=0.9.0,<1.0"]
+build-backend = "uv_build"
+
+[tool.uv]
+package = true
+
+[tool.uv.build-backend]
+module-root = "app"
+module-name = "custom_json"
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+src = ["app", "tests"]
+
+[tool.ruff.lint]
+select = ["B", "D", "E", "F", "I", "SIM", "UP"]
+ignore = ["D100", "D103", "D104"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unreachable = true
+show_error_codes = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --strict-config"
+
+[tool.coverage.run]
+branch = true
+source = ["custom_json"]
+
+[tool.coverage.report]
+show_missing = true
